@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Usermedia</title>
+</head>
+<body>
+	<video id="video" width="250" height="180"></video>
+		
+
+
+
+
+	<script type="text/javascript">
+		var promise = navigator.mediaDevices.getUserMedia({video:true});
+		document.write(promise);
+		navigator.mediaDevices.getUserMedia({video:true})
+		.then(function(stream) {
+		  
+		})
+		.catch(function(err) {
+		  console.log("error: not found");
+		  document.write("not found");
+
+		});
+	</script>
+</body>
+</html>
