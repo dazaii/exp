@@ -11,5 +11,4 @@ function change (){
         alert('Stop listening?');
         tracker = 'm';
     }
-    
 }

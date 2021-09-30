@@ -3,6 +3,9 @@ body{
 	background-color: #ffefa7;
 }
 
+.chordname{
+    font-size: 9em;
+}
 .container{
 	margin: auto;
     width: 50%;
