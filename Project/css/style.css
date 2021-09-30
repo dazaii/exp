@@ -1,10 +1,17 @@
 body{
-	font-family: monospace, sans-serif, serif;
+	font-family: robotoslab ,monospace, sans-serif, serif;
 	background-color: #ffefa7;
 }
 
+@font-face{
+    font-family: 'robotoslab';
+    src: url('../fonts/roboto.ttf');
+}
+
 .chordname{
-    font-size: 9em; 
+    font-size: 9em;
+    position: relative;
+    top: -40px;
 }
 .container{
 	margin: auto;
