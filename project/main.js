@@ -5,6 +5,7 @@ function change (){
     var bglayer = document.getElementById ('bglayer');
     var container = document.getElementById ('container');
     var statusLabel = document.getElementById ('status');
+    var bars = document.getElementById ('bars');
     if(tracker == 'm'){
         sound.src ="pic/a.png";
         statusLabel.innerHTML = "...Listening...";
@@ -14,7 +15,8 @@ function change (){
         statusLabel.innerHTML = "Press to start";
         tracker = 'm';
     }
-
+    bars.classList.toggle('contflex');
+    sound.classList.toggle('micdisappear');
     bglayer.classList.toggle('scaleup');
     container.classList.toggle('scaledown');
 }
