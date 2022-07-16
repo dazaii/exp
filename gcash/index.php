@@ -1,3 +1,24 @@
+<?php
+	//import another php file
+	require 'mysqlconnection.php';
+
+	//log in feature (not the safe way)
+	session_start();
+	if(!isset($_SESSION['loggedin'])){
+		$_SESSION['loggedin'] = "";
+		//if the session variable is not set (not logged in yet), header() redirects you to another page
+		header("Location: login.php");
+	}else{
+		if($_SESSION['loggedin'] != $loginpassword){
+			//redirect to login.php page
+			header("Location: login.php");
+		}else{
+			//logged in, can now continue to access the page
+		}
+	}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,25 +31,15 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
-<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$databasename = "gcash";
-
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $databasename);
-
-	// Check connection
-	if ($conn->connect_error) {
-	  die("Connection failed: " . $conn->connect_error);
-	}
-?>
 	<div>
 		<h1 class="gcashish">Insert a record</h1>
+
+		<a href="logout.php">logout</a>
+
 		<form action="index.php" method="post">
+			<input type="date" name="hiddendate" style="display: none;">
 			<input type="date" name="date">
-			<input type="text" onkeyup="mult(this.value)" id="amount" placeholder="Amount" name="amount">
+			<input type="number" onkeyup="mult(this.value)" onchange="mult(this.value)" id="amount" placeholder="Amount" name="amount">
 			<input type="hidden" id="fee" name="fee">
 			<input type="number" placeholder="Fee" disabled id="kofee">
 			<select name="ttype">
@@ -39,22 +50,36 @@
 			<input type="submit" class="s" name="add" value="Insert record">
 			<a href="index.php"> Clear data</a>
 		</form>
+
+
+
+
+
 <?php
 		//if the 'add' button is clicked, process the data
-		if(isset($_POST['add']) && isset($_POST['amount']) && isset($_POST['date']) && isset($_POST['ttype'])){
+		if(isset($_POST['add']) && isset($_POST['amount']) && isset($_POST['date']) && $_POST['ttype']!=""){
 			
 			//get values from input fields
 			$date = $_POST['date'];
-			$amount = $_POST['amount'];
-			$fee = (int)($_POST['fee']);
-			$transactiontype = $_POST['ttype'];
-			$date = date('Y-m-d', strtotime($date));
+			$hiddendate = $_POST['hiddendate'];
+			//para mavalidate kung nag input ba ng date o hindi
+			//gumawa ng dalawang date input, pero yung isa ginawang hidden gamit ang css para di makita
+			//so if parehas sila ng value, then most likely hindi pa naga input ang user ng date
+			if($date == $hiddendate){
+				echo "<p class='pastelred'>Please set date</p>";
+			}else{
+				//get values from input fields
+				$amount = $_POST['amount'];
+				$fee = (int)($_POST['fee']);
+				$transactiontype = $_POST['ttype'];
+				$date = date('Y-m-d', strtotime($date));
 
-			$sql = "INSERT INTO records (issuedate, amount, fee, transactiontype) VALUES('$date', $amount, $fee, '$transactiontype')";
-			if ($conn->query($sql) === TRUE) {
-			  echo "<p class='green'>New record created successfully</p>";
-			} else {
-			  echo "Error: " . $sql . "<br>" . $conn->error;
+				$sql = "INSERT INTO records (issuedate, amount, fee, transactiontype) VALUES('$date', $amount, $fee, '$transactiontype')";
+				if ($conn->query($sql) === TRUE) {
+				  echo "<p class='green'>New record created</p>";
+				} else {
+				  echo "Error: " . $sql . "<br>" . $conn->error;
+				}
 			}
 			
 
@@ -65,7 +90,15 @@
 	</div>
 <div class="newrow">
 
+
+
+
+
+
+
+
 <?php
+	//displaying data into table
 	$sql = "SELECT * from records ORDER BY id DESC LIMIT 10";
 	$result = $conn->query($sql);
 
@@ -79,7 +112,6 @@
 			</tr>
 
 
-
 	";
 	if ($result->num_rows > 0) {
 	  // output data of each row
@@ -89,13 +121,14 @@
 	    $fee = $row['fee'];
 	    $date = $row['issuedate'];
 	    $type = $row['transactiontype'];
-	    echo "<tr>
-	    	<td style='background: #eee'>$id</td>
-	    	<td>$date</td>
-	    	<td>".asPesos($amt)."</td>
-	    	<td>".asPesos($fee)."</td>
-	    	<td>$type</td>
-	    </tr>";
+	    echo "
+	    	<tr>
+		    	<td style='background: #eee'>$id</td>
+		    	<td>$date</td>
+		    	<td>".asPesos($amt)."</td>
+		    	<td>".asPesos($fee)."</td>
+		    	<td>$type</td>
+		    </tr>";
 	  }
 	} else {
 	  echo "0 results";
