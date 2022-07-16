@@ -1,0 +1,63 @@
+<<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style type="text/css">
+    body{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /*overflow: hidden;*/
+      background: #000;
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="mainwindow"></div>
+
+<script type="text/javascript" src="p5.min.js"></script>
+<script type="text/javascript">
+var canvasSize = 1500;
+var dots = 60;
+var dotpos = canvasSize/dots;
+  function setup() {
+    frameRate(90);
+    let canvas = createCanvas(1500, canvasSize);
+    canvas.parent("mainwindow");
+  }
+let frames = 0;
+
+  function draw() {
+    angleMode(DEGREES);
+    background(0);
+    frames = sin(frameCount);
+    frames = map(frames,-1,1,-20,20)
+    centerX = Math.round(mouseX/dotpos)/(frames * sin(frameCount/1.5));
+    centerY = Math.round(mouseY/dotpos)/(frames * sin(frameCount/1.5));
+
+    //shrinkSize = dist(centerX, centerY, 0,0);
+
+    size = 0;
+    for (let i = 0; i < dots; i++) {
+      for (let j = 0; j < dots+5; j++) {
+        shrinkSize = dist(i, j, centerX,centerY);
+        size = map(shrinkSize, 30, 0, 25, 3, true);
+        blue = map(size, 0,25,0,100);
+        red = map(size, 0,25,0,255);
+        fill(red,blue,200);
+        rect(i*dotpos,j*dotpos,size+frames,size+frames);
+      }
+    }
+    
+  }
+</script>
+</body>
+</html>
+
+
+
+
