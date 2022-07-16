@@ -6,7 +6,7 @@
 	$databasename = "gcash";
 
 	//your login credential
-	$loginpassword = "elaiimyours";
+	$loginpassword = "pass";
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $databasename);
